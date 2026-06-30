@@ -20,12 +20,54 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "quantum.h"
 
+// ==========================================
+// 1. タップダンスの定義
+// ==========================================
+// 1. タップダンスのID定義
+enum {
+    MY_TD_KEY = 0
+};
+
+// 2. 「単押し」「ダブルタップ」「ホールド」に応じた実際の処理（コールバック関数）
+// qk_ を外し、関数のプロトタイプ宣言（事前告知）を上部に置いてエラーを回避します
+void dance_semi_finished(tap_dance_state_t *state, void *user_data);
+void dance_semi_reset(tap_dance_state_t *state, void *user_data);
+
+void dance_semi_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        if (state->interrupted || !state->pressed) {
+            register_code16(KC_COLN); // 単タップ：コロン
+        } else {
+            register_code16(KC_LCTL); // 長押し：左Controlを押し下げる
+        }
+    } else if (state->count == 2) {
+        register_code16(KC_SCLN);     // ダブルタップ：セミコロン
+    }
+}
+
+void dance_semi_reset(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        if (!state->interrupted && state->pressed) {
+            unregister_code16(KC_LCTL); // 離した時：左Controlを引き上げる（これでバグらない）
+        }
+    }
+}
+
+// 3. リストへの登録構文（qk_ を外して tap_dance_action_t に修正）
+tap_dance_action_t tap_dance_actions[] = {
+    [MY_TD_KEY] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_semi_finished, dance_semi_reset)
+};
+
+#define TAP_0 TD(MY_TD_KEY)
+// ==========================================
+// 2. キーマップの配置（TAP_0 の定義より後ろに置く）
+// ==========================================
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
     KC_ESC   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_DEL   ,
-    KC_TAB   , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , S(KC_7)  ,
+    KC_TAB   , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , TAP_0     , KC_K     , KC_L     , KC_SCLN  , S(KC_7)  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , KC_INT1  ,
               KC_LALT,KC_LGUI,LCTL_T(KC_LNG2)     ,LT(1,KC_SPC),LT(3,KC_LNG1),                  KC_BSPC,LT(2,KC_ENT), RCTL_T(KC_LNG2),     KC_RALT  , KC_PSCR
   ),
@@ -78,43 +120,3 @@ COMBO(my_jq, KC_QUES),
 };
 #endif
 
-// 1. タップダンスのID定義
-enum {
-    MY_TD_KEY = 0
-};
-
-// 2. 「単押し」「ダブルタップ」「ホールド」に応じた実際の処理（コールバック関数）
-// qk_ を外し、関数のプロトタイプ宣言（事前告知）を上部に置いてエラーを回避します
-void dance_semi_finished(tap_dance_state_t *state, void *user_data);
-void dance_semi_reset(tap_dance_state_t *state, void *user_data);
-
-void dance_semi_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {          // 1回押されたとき
-        if (state->interrupted || !state->pressed) {
-            // ① すぐ離されたら（単タップ） -> コロンを入力
-            register_code16(KC_COLN);
-        } else {
-            // ② 押しっぱなしなら（ホールド） -> 独自のレイヤー（例: MO(1)）に切り替え
-            register_code16(KC_A);
-        }
-    } else if (state->count == 2) {   // 2回連続で押されたとき
-        // ③ ダブルタップされたら -> セミコロンを入力
-        register_code16(KC_SCLN);
-    }
-}
-
-// キーを離したときのクリーンアップ処理（ホールドしたレイヤーをオフにするなど）
-void dance_semi_reset(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        if (!state->interrupted && state->pressed) {
-            layer_off(1); // ホールドが終わったらレイヤーを戻す
-        }
-    }
-}
-
-// 3. リストへの登録構文（qk_ を外して tap_dance_action_t に修正）
-tap_dance_action_t tap_dance_actions[] = {
-    [MY_TD_KEY] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_semi_finished, dance_semi_reset)
-};
-
-#define TAP_0 TD(MY_TD_KEY)
