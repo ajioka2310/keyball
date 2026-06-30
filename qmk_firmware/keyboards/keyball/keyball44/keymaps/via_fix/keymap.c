@@ -77,3 +77,40 @@ combo_t key_combos[] = {
 COMBO(my_jq, KC_QUES),
 };
 #endif
+
+// 1. タップダンスのID定義
+enum {
+    MY_TD_KEY = 0
+};
+
+// 2. 「単押し」「ダブルタップ」「ホールド」に応じた実際の処理（コールバック関数）
+void dance_semi_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {          // 1回押されたとき
+        if (state->interrupted || !state->pressed) {
+            // ① すぐ離されたら（単タップ） -> コロンを入力
+            register_code16(KC_COLN);
+        } else {
+            // ② 押しっぱなしなら（ホールド） -> 独自のレイヤー（例: MO(1)）に切り替え
+            layer_on(KC_A);
+        }
+    } else if (state->count == 2) {   // 2回連続で押されたとき
+        // ③ ダブルタップされたら -> セミコロンを入力
+        register_code16(KC_SCLN);
+    }
+}
+
+// キーを離したときのクリーンアップ処理（ホールドしたレイヤーをオフにするなど）
+void dance_semi_reset(qk_tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        if (!state->interrupted && state->pressed) {
+            layer_off(1); // ホールドが終わったらレイヤーを戻す
+        }
+    }
+}
+
+// 3. リストへの登録構文
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [MY_TD_KEY] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_semi_finished, dance_semi_reset)
+};
+
+#define TAP_0 TD(MY_TD_KEY)
