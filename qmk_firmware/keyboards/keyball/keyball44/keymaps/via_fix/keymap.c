@@ -161,7 +161,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
     KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
-              KC_LALT,KC_LGUI,  KC_SPC     ,KC_SPC,  KC_BTN1,                  MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
+              MO(4),KC_LGUI,  KC_LALT     ,KC_BTN1,   KC_SPC,                 MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
   ),
 
   [1] = LAYOUT_universal(
@@ -239,11 +239,13 @@ const uint16_t PROGMEM my_jq[] = {KC_J, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
+const uint16_t PROGMEM my_tabq[] = {KC_TAB, KC_Q, COMBO_END};
 combo_t key_combos[] = {  
 COMBO(my_jq, KC_QUES),
 COMBO(my_jk, KC_BTN1),
 COMBO(my_gh, KC_EQL),
 COMBO(my_bn, KC_MINS),
+COMBO(my_tabq, KC_ESC),
 };
 #endif
 
