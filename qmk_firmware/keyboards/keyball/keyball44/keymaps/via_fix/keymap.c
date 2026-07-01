@@ -158,10 +158,10 @@ tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
-    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_DEL   ,
+    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BS   ,
     KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
-    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , KC_INT1  ,
-              KC_LALT,KC_LGUI,  KC_SPC     ,KC_SPC,  KC_BTN1,                  MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , KC_PSCR
+    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
+              KC_LALT,KC_LGUI,  KC_SPC     ,KC_SPC,  KC_BTN1,                  MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
   ),
 
   [1] = LAYOUT_universal(
@@ -184,12 +184,40 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     RGB_RMOD , RGB_HUD  , RGB_SAD  , RGB_VAD  , _______  , SCRL_DVD ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
+
+  [4] = LAYOUT_universal(
+    RGB_TOG  , AML_TO   , AML_I50  , AML_D50  , _______  , _______  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
+    RGB_MOD  , RGB_HUI  , RGB_SAI  , RGB_VAI  , _______  , SCRL_DVI ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
+    RGB_RMOD , RGB_HUD  , RGB_SAD  , RGB_VAD  , _______  , SCRL_DVD ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
+                  QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
+  ),
 };
 // clang-format on
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-    // Auto enable scroll mode when the highest layer is 3
-    keyball_set_scroll_mode(get_highest_layer(state) == 3);
+layer_state_set_user(layer_state_t state) {
+    // レイヤーの割り当て状態を取得
+    uint8_t highest_layer = get_highest_layer(state);
+
+    if (highest_layer == 3) {
+        // レイヤー3のときは縦スクロールモードを有効に
+        keyball_set_scroll_mode(true);
+        // 念のため通常のスクロール方向に固定
+        #ifdef VIA_ENABLE
+        // VIA等で方向が変わる場合、必要に応じてここに通常のスクロール方向を指定
+        #endif
+    } 
+    else if (highest_layer == 4) {
+        // レイヤー2のときもスクロールモードを有効に
+        keyball_set_scroll_mode(true);
+        // 【ここに横スクロール化の処理】
+        // 通常、Keyballのスクロール軸を入れ替える（X軸とY軸を反転、または横に固定）
+        // QMKの公式機能やKeyballのカスタム関数を呼び出します
+    } 
+    else {
+        // それ以外のレイヤー（ベースなど）ではスクロールをオフ
+        keyball_set_scroll_mode(false);
+    }
+
     return state;
 }
 
@@ -207,9 +235,13 @@ void oledkit_render_info_user(void) {
 #ifdef COMBO_ENABLE
 const uint16_t PROGMEM my_jq[] = {KC_J, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
+const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
 combo_t key_combos[] = {  
 COMBO(my_jq, KC_QUES),
 COMBO(my_jk, KC_BTN1),
+COMBO(my_gh, KC_EQL),
+COMBO(my_bn, KC_MINS),
 };
 #endif
 
