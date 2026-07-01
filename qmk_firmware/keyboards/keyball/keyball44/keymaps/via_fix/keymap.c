@@ -79,13 +79,13 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
         register_code(KC_ENT);
         break;
     case SINGLE_HOLD:
-        layer_on(_RAISE);
+        layer_on(0);
         break;
     case DOUBLE_TAP:
-        layer_invert(_LOWER);
+        layer_invert(0);
         break;
     case SINGLE_TAP_HOLD:
-        layer_on(_LOWER);
+        layer_on(0);
         break;
   }
 }
@@ -96,12 +96,12 @@ void x_reset_1 (tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_ENT);
         break;
     case SINGLE_HOLD:
-        layer_off(_RAISE);
+        layer_off(0);
         break;
     case DOUBLE_TAP:
         break;
     case SINGLE_TAP_HOLD:
-        layer_off(_LOWER);
+        layer_off(0);
         break;
   }
   xtap_state.state = 0;
@@ -115,13 +115,13 @@ void x_finished_2 (tap_dance_state_t *state, void *user_data) {
         register_code(KC_MUTE);
         break;
     case SINGLE_HOLD:
-        layer_on(_ADJUST);
+        layer_on(0);
         break;
     case DOUBLE_TAP:
-        layer_invert(_RAISE);
+        layer_invert(0);
         break;
     case SINGLE_TAP_HOLD:
-        layer_on(_LOWER);
+        layer_on(0);
         break;
   }
 }
@@ -132,12 +132,12 @@ void x_reset_2 (tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_MUTE);
         break;
     case SINGLE_HOLD:
-        layer_off(_ADJUST);
+        layer_off(0);
         break;
     case DOUBLE_TAP:
         break;
     case SINGLE_TAP_HOLD:
-        layer_off(_LOWER);
+        layer_off(0);
         break;
   }
   xtap_state.state = 0;
@@ -207,7 +207,7 @@ void oledkit_render_info_user(void) {
 #ifdef COMBO_ENABLE
 const uint16_t PROGMEM my_jq[] = {KC_J, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
-combo_t key_combos[] = {
+combo_t key_combos[] = {  
 COMBO(my_jq, KC_QUES),
 COMBO(my_jk, KC_BTN1),
 };
