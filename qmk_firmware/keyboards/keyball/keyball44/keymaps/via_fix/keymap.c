@@ -206,9 +206,10 @@ void oledkit_render_info_user(void) {
 
 #ifdef COMBO_ENABLE
 const uint16_t PROGMEM my_jq[] = {KC_J, KC_Q, COMBO_END};
-
+const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
 combo_t key_combos[] = {
 COMBO(my_jq, KC_QUES),
+COMBO(my_jk, KC_BTN1),
 };
 #endif
 
