@@ -76,13 +76,13 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
   xtap_state.state = cur_dance(state);
   switch (xtap_state.state) {
     case SINGLE_TAP:
-        register_code(KC_ENT);
+        register_code(KC_Y);
         break;
     case SINGLE_HOLD:
         layer_on(0);
         break;
     case DOUBLE_TAP:
-        layer_invert(0);
+        register_code(LALT(KC_GRV));
         break;
     case SINGLE_TAP_HOLD:
         layer_on(0);
@@ -93,12 +93,13 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
 void x_reset_1 (tap_dance_state_t *state, void *user_data) {
   switch (xtap_state.state) {
     case SINGLE_TAP: 
-        unregister_code(KC_ENT);
+        unregister_code(KC_Y);
         break;
     case SINGLE_HOLD:
         layer_off(0);
         break;
     case DOUBLE_TAP:
+        unregister_code(LALT(KC_GRV));
         break;
     case SINGLE_TAP_HOLD:
         layer_off(0);
@@ -158,7 +159,7 @@ tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
-    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
+    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        TAP_1     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
     KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
               MO(4),KC_LGUI,  KC_LALT     ,KC_BTN1,   KC_SPC,                 MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
@@ -166,16 +167,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [1] = LAYOUT_universal(
     _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    _______  ,  _______ , _______  , KC_UP   , KC_ENT   , KC_DEL   ,                                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT  , KC_BTN3  , KC_F12   ,
-    _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_RGHT  , KC_BSPC  ,                                         KC_PGDN  , KC_LEFT  , KC_DOWN  , KC_RGHT  , _______  , _______  ,
+    _______  ,  _______ , _______  , KC_UP   , KC_ENT   , KC_DEL   ,                                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_BTN3  , KC_F12   ,
+    _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_BTN2  , KC_BSPC  ,                                         KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
 
   [2] = LAYOUT_universal(
-    _______  , KC_1      , KC_2     , KC_3    , KC_4     , KC_5  ,                                           KC_6     , KC_7     , KC_8      , KC_9     , KC_0      , _______ ,
-    _______  , S(KC_SCLN), KC_4     , KC_5    , KC_6     , KC_RBRC  ,                                         KC_NUHS  , KC_MINS  , S(KC_EQL), S(KC_3)  , KC_QUOT  , S(KC_2)  ,
-    _______  , S(KC_MINS), KC_1     , KC_2    , KC_3     ,S(KC_RBRC),                                        S(KC_NUHS),S(KC_INT1), KC_EQL   ,S(KC_LBRC),S(KC_SLSH),S(KC_INT3),
-                  KC_0     , KC_DOT  , _______  ,         _______  , _______  ,                   KC_DEL   , _______  , _______       , _______  , _______
+    _______  , KC_1      , KC_2     , KC_3    , KC_4     , KC_5    ,                                           KC_6     , KC_7    , KC_8     , KC_9     , KC_0     , _______ ,
+    _______  , S(KC_1)   , S(KC_2)  , S(KC_3) , S(KC_4)  , S(KC_5) ,                                         S(KC_6)  , S(KC_7)   , S(KC_8)  , S(KC_9)  , S(KC_0)  , _______ ,
+    _______  , S(KC_MINS), KC_1     , KC_2    , KC_3     ,S(KC_RBRC),                                        KC_LBRC  , KC_RBRC   , KC_EQL   , KC_COMM  , KC_GRV   , KC_BSLS ,
+                  _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
 
   [3] = LAYOUT_universal(
@@ -235,23 +236,31 @@ void oledkit_render_info_user(void) {
 #endif
 
 #ifdef COMBO_ENABLE
-const uint16_t PROGMEM my_jq[] = {KC_J, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
 const uint16_t PROGMEM my_tabq[] = {KC_TAB, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_bacp[] = {KC_BSPC, KC_P, COMBO_END};
 const uint16_t PROGMEM my_spcmo1[] = {KC_SPC, MO(1), COMBO_END};
+const uint16_t PROGMEM my_qw[] = {KC_Q, KC_W, COMBO_END};
+const uint16_t PROGMEM my_sd[] = {KC_S, KC_E, COMBO_END};
+const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
+
+
 
 
 combo_t key_combos[] = {  
-COMBO(my_jq, KC_QUES),
-COMBO(my_jk, KC_BTN1),
-COMBO(my_gh, KC_EQL),
-COMBO(my_bn, KC_MINS),
-COMBO(my_tabq, KC_ESC),
-COMBO(my_bacp, KC_DEL),
-COMBO(my_spcmo1, KC_QUOT),
+COMBO(my_jk, KC_BTN1), // クリック
+COMBO(my_gh, KC_EQL), // = +
+COMBO(my_bn, KC_MINS), // ー _
+COMBO(my_tabq, KC_ESC), // エスケープ
+COMBO(my_bacp, KC_DEL), // デリート
+COMBO(my_spcmo1, KC_QUOT), // '  "
+COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
+COMBO(my_sd, KC_ENT), // エンター
+COMBO(my_we, KC_DEL), // デリート
+
+
 
 };
 #endif
