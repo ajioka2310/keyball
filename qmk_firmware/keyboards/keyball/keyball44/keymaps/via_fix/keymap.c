@@ -23,42 +23,134 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ==========================================
 // 1. タップダンスの定義
 // ==========================================
-// 1. タップダンスのID定義
+#ifdef TAP_DANCE_ENABLE
+typedef struct {
+  bool is_press_action;
+  int state;
+} tap;
+
 enum {
-    MY_TD_KEY = 0
+  SINGLE_TAP = 1,
+  SINGLE_HOLD,
+  DOUBLE_TAP,
+  SINGLE_TAP_HOLD,
+  DOUBLE_SINGLE_TAP,
 };
 
-// 2. 「単押し」「ダブルタップ」「ホールド」に応じた実際の処理（コールバック関数）
-// qk_ を外し、関数のプロトタイプ宣言（事前告知）を上部に置いてエラーを回避します
-void dance_semi_finished(tap_dance_state_t *state, void *user_data);
-void dance_semi_reset(tap_dance_state_t *state, void *user_data);
+enum {
+ X_TAP_DANCE_1 = 0,
+ X_TAP_DANCE_2,
+};
 
-void dance_semi_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        if (state->interrupted || !state->pressed) {
-            register_code16(KC_COLN); // 単タップ：コロン
-        } else {
-            register_code16(KC_LCTL); // 長押し：左Controlを押し下げる
-        }
-    } else if (state->count == 2) {
-        register_code16(KC_SCLN);     // ダブルタップ：セミコロン
-    }
+int cur_dance (tap_dance_state_t *state);
+
+void x_finished (tap_dance_state_t *state, void *user_data);
+void x_reset (tap_dance_state_t *state, void *user_data);
+
+#define TAP_1 TD(X_TAP_DANCE_1)
+#define TAP_2 TD(X_TAP_DANCE_2)
+#endif
+
+/* Tap danceの設定 */
+#ifdef TAP_DANCE_ENABLE
+int cur_dance (tap_dance_state_t *state) {
+  if (state->count ==1) {
+    if (!state->pressed) return SINGLE_TAP;
+    else return SINGLE_HOLD;
+  }
+  else if (state->count == 2) {
+    if (state->interrupted) return DOUBLE_SINGLE_TAP;
+    else if (state->pressed) return SINGLE_TAP_HOLD;
+    else return DOUBLE_TAP;
+  }
+  else return 8; //magic number. At some point this method will expand to work for more presses
 }
 
-void dance_semi_reset(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        if (!state->interrupted && state->pressed) {
-            unregister_code16(KC_LCTL); // 離した時：左Controlを引き上げる（これでバグらない）
-        }
-    }
+static tap xtap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+/* X_TAP_DANCE_1の定義 */
+void x_finished_1 (tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = cur_dance(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        register_code(KC_ENT);
+        break;
+    case SINGLE_HOLD:
+        layer_on(_RAISE);
+        break;
+    case DOUBLE_TAP:
+        layer_invert(_LOWER);
+        break;
+    case SINGLE_TAP_HOLD:
+        layer_on(_LOWER);
+        break;
+  }
 }
 
-// 3. リストへの登録構文（qk_ を外して tap_dance_action_t に修正）
+void x_reset_1 (tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP: 
+        unregister_code(KC_ENT);
+        break;
+    case SINGLE_HOLD:
+        layer_off(_RAISE);
+        break;
+    case DOUBLE_TAP:
+        break;
+    case SINGLE_TAP_HOLD:
+        layer_off(_LOWER);
+        break;
+  }
+  xtap_state.state = 0;
+}
+
+/* X_TAP_DANCE_2の定義 */
+void x_finished_2 (tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = cur_dance(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP:
+        register_code(KC_MUTE);
+        break;
+    case SINGLE_HOLD:
+        layer_on(_ADJUST);
+        break;
+    case DOUBLE_TAP:
+        layer_invert(_RAISE);
+        break;
+    case SINGLE_TAP_HOLD:
+        layer_on(_LOWER);
+        break;
+  }
+}
+
+void x_reset_2 (tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP: 
+        unregister_code(KC_MUTE);
+        break;
+    case SINGLE_HOLD:
+        layer_off(_ADJUST);
+        break;
+    case DOUBLE_TAP:
+        break;
+    case SINGLE_TAP_HOLD:
+        layer_off(_LOWER);
+        break;
+  }
+  xtap_state.state = 0;
+}
+
+
 tap_dance_action_t tap_dance_actions[] = {
-    [MY_TD_KEY] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_semi_finished, dance_semi_reset)
+ [X_TAP_DANCE_1] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, x_finished_1, x_reset_1),
+ [X_TAP_DANCE_2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, x_finished_2, x_reset_2),
 };
+#endif
 
-#define TAP_0 TD(MY_TD_KEY)
+
 // ==========================================
 // 2. キーマップの配置（TAP_0 の定義より後ろに置く）
 // ==========================================
@@ -66,23 +158,23 @@ tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
-    KC_ESC   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_DEL   ,
-    KC_TAB   , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , TAP_0     , KC_K     , KC_L     , KC_SCLN  , S(KC_7)  ,
+    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_DEL   ,
+    KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , KC_INT1  ,
-              KC_LALT,KC_LGUI,LCTL_T(KC_LNG2)     ,LT(1,KC_SPC),LT(3,KC_LNG1),                  KC_BSPC,LT(2,KC_ENT), RCTL_T(KC_LNG2),     KC_RALT  , KC_PSCR
+              KC_LALT,KC_LGUI,  KC_SPC     ,KC_SPC,  KC_BTN1,                  MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , KC_PSCR
   ),
 
   [1] = LAYOUT_universal(
-    SSNP_FRE ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    SSNP_VRT ,  _______ , _______  , KC_UP   , KC_ENT   , KC_DEL   ,                                         KC_PGUP  , KC_BTN1  , KC_UP    , KC_BTN2  , KC_BTN3  , KC_F12   ,
-    SSNP_HOR ,  _______ , KC_LEFT  , KC_DOWN , KC_RGHT  , KC_BSPC  ,                                         KC_PGDN  , KC_LEFT  , KC_DOWN  , KC_RGHT  , _______  , _______  ,
+    _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
+    _______  ,  _______ , _______  , KC_UP   , KC_ENT   , KC_DEL   ,                                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT  , KC_BTN3  , KC_F12   ,
+    _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_RGHT  , KC_BSPC  ,                                         KC_PGDN  , KC_LEFT  , KC_DOWN  , KC_RGHT  , _______  , _______  ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
 
   [2] = LAYOUT_universal(
-    _______  ,S(KC_QUOT), KC_7     , KC_8    , KC_9     , S(KC_8)  ,                                         S(KC_9)  , S(KC_1)  , S(KC_6)  , KC_LBRC  , S(KC_4)  , _______  ,
-    _______  ,S(KC_SCLN), KC_4     , KC_5    , KC_6     , KC_RBRC  ,                                         KC_NUHS  , KC_MINS  , S(KC_EQL), S(KC_3)  , KC_QUOT  , S(KC_2)  ,
-    _______  ,S(KC_MINS), KC_1     , KC_2    , KC_3     ,S(KC_RBRC),                                        S(KC_NUHS),S(KC_INT1), KC_EQL   ,S(KC_LBRC),S(KC_SLSH),S(KC_INT3),
+    _______  , KC_1      , KC_2     , KC_3    , KC_4     , KC_5  ,                                           KC_6     , KC_7     , KC_8      , KC_9     , KC_0      , _______ ,
+    _______  , S(KC_SCLN), KC_4     , KC_5    , KC_6     , KC_RBRC  ,                                         KC_NUHS  , KC_MINS  , S(KC_EQL), S(KC_3)  , KC_QUOT  , S(KC_2)  ,
+    _______  , S(KC_MINS), KC_1     , KC_2    , KC_3     ,S(KC_RBRC),                                        S(KC_NUHS),S(KC_INT1), KC_EQL   ,S(KC_LBRC),S(KC_SLSH),S(KC_INT3),
                   KC_0     , KC_DOT  , _______  ,         _______  , _______  ,                   KC_DEL   , _______  , _______       , _______  , _______
   ),
 
