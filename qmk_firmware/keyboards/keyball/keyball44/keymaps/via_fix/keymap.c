@@ -240,12 +240,19 @@ const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
 const uint16_t PROGMEM my_tabq[] = {KC_TAB, KC_Q, COMBO_END};
+const uint16_t PROGMEM my_bacp[] = {KC_BSPC, KC_P, COMBO_END};
+const uint16_t PROGMEM my_spcmo1[] = {KC_SPC, MO(1), COMBO_END};
+
+
 combo_t key_combos[] = {  
 COMBO(my_jq, KC_QUES),
 COMBO(my_jk, KC_BTN1),
 COMBO(my_gh, KC_EQL),
 COMBO(my_bn, KC_MINS),
 COMBO(my_tabq, KC_ESC),
+COMBO(my_bacp, KC_DEL),
+COMBO(my_spcmo1, KC_QUOT),
+
 };
 #endif
 
