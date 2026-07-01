@@ -158,7 +158,7 @@ tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
-    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BS   ,
+    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
     KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
               KC_LALT,KC_LGUI,  KC_SPC     ,KC_SPC,  KC_BTN1,                  MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
@@ -192,33 +192,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
 };
-// clang-format on
 
-layer_state_set_user(layer_state_t state) {
-    // レイヤーの割り当て状態を取得
+// ==========================================
+// 3. レイヤー変更時のスクロールモード制御
+// ==========================================
+layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t highest_layer = get_highest_layer(state);
-
-    if (highest_layer == 3) {
-        // レイヤー3のときは縦スクロールモードを有効に
+    
+    // レイヤー4（横スクロール用）または レイヤー3（縦スクロール用）のときにスクロールを有効化
+    if (highest_layer == 4 || highest_layer == 3) {
         keyball_set_scroll_mode(true);
-        // 念のため通常のスクロール方向に固定
-        #ifdef VIA_ENABLE
-        // VIA等で方向が変わる場合、必要に応じてここに通常のスクロール方向を指定
-        #endif
-    } 
-    else if (highest_layer == 4) {
-        // レイヤー2のときもスクロールモードを有効に
-        keyball_set_scroll_mode(true);
-        // 【ここに横スクロール化の処理】
-        // 通常、Keyballのスクロール軸を入れ替える（X軸とY軸を反転、または横に固定）
-        // QMKの公式機能やKeyballのカスタム関数を呼び出します
-    } 
-    else {
-        // それ以外のレイヤー（ベースなど）ではスクロールをオフ
+    } else {
         keyball_set_scroll_mode(false);
     }
-
     return state;
+}
+
+// ==========================================
+// 4. トラックボールの挙動カスタム（レイヤー2を横スクロール化）
+// ==========================================
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    // 現在のレイヤーが 4 のときだけ処理
+    if (get_highest_layer(layer_state) == 4) {
+        // トラックボールの縦スクロールの動きを、横スクロールにコンバートする
+        if (mouse_report.v != 0) {
+            mouse_report.h = mouse_report.v; // 縦の移動量を横に移植
+            mouse_report.v = 0;              // 縦の動きを殺す
+        }
+    }
+    return mouse_report;
 }
 
 #ifdef OLED_ENABLE
