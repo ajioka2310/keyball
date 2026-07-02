@@ -181,9 +181,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_G) SS_TAP(X_K));
         }
       return false;
-
-      return true;
     }
+    return true;
 }
 // ==========================================
 // 2. キーマップの配置（TAP_0 の定義より後ろに置く）
