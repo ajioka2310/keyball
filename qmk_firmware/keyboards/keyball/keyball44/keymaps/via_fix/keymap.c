@@ -82,8 +82,9 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
         layer_on(0);
         break;
     case DOUBLE_TAP:
-        register_code(LALT(KC_GRV));
-        break;
+        register_code(KC_LALT); // まず左Altを押しっぱなしにする
+        register_code(KC_GRV);  // その状態でKC_GRV（バッククォート/半角全角）を押す
+    break;
     case SINGLE_TAP_HOLD:
         layer_on(0);
         break;
@@ -99,7 +100,8 @@ void x_reset_1 (tap_dance_state_t *state, void *user_data) {
         layer_off(0);
         break;
     case DOUBLE_TAP:
-        unregister_code(LALT(KC_GRV));
+        unregister_code(KC_GRV);  // 先にKC_GRVを離す
+        unregister_code(KC_LALT); // 最後に左Altを離す
         break;
     case SINGLE_TAP_HOLD:
         layer_off(0);
@@ -160,14 +162,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
     KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        TAP_1     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
-    KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
-    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
-              MO(4),KC_LGUI,  KC_LALT     ,KC_BTN1,   KC_SPC,                 MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
+    KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_EQL  , KC_ENT  ,
+    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_MINS  , MO(4)  ,
+               KC_LALT,   KC_LGUI  , KC_BTN1  , KC_SPC,  MO(4),               MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
   ),
 
   [1] = LAYOUT_universal(
     _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    _______  ,  _______ , _______  , KC_UP   , KC_ENT   , KC_DEL   ,                                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_BTN3  , KC_F12   ,
+    _______  ,  _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),                                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_BTN3  , KC_F12   ,
     _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_BTN2  , KC_BSPC  ,                                         KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
@@ -188,7 +190,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [4] = LAYOUT_universal(
     RGB_TOG  , AML_TO   , AML_I50  , AML_D50  , _______  , _______  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
-    RGB_MOD  , AML_TO  , RGB_SAI  , RGB_VAI  , _______  , SCRL_DVI ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
+    RGB_MOD  , _______ , KC_MS_L  , KC_MS_D , KC_MS_U   , KC_MS_R   ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
     RGB_RMOD , RGB_HUD  , RGB_SAD  , RGB_VAD  , _______  , SCRL_DVD ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
@@ -251,15 +253,14 @@ const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
 
 combo_t key_combos[] = {  
 COMBO(my_jk, KC_BTN1), // クリック
-COMBO(my_gh, KC_EQL), // = +
-COMBO(my_bn, KC_MINS), // ー _
+COMBO(my_gh, KC_SCLN), // ; :
+COMBO(my_bn, KC_SLSH), // / ?
 COMBO(my_tabq, KC_ESC), // エスケープ
 COMBO(my_bacp, KC_DEL), // デリート
 COMBO(my_spcmo1, KC_QUOT), // '  "
 COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
 COMBO(my_sd, KC_ENT), // エンター
 COMBO(my_we, KC_DEL), // デリート
-
 
 
 };
