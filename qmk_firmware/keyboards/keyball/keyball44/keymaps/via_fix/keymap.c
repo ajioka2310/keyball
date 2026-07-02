@@ -138,7 +138,7 @@ void x_reset_2 (tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_LALT);
         break;
     case DOUBLE_TAP:
-        // 何もしない（process_record_user側で引き戻すため）
+        // 何もしない
         break;
     case SINGLE_TAP_HOLD:
         unregister_code(KC_LALT);
@@ -175,13 +175,15 @@ static uint16_t my_tap_timer = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // -----------------------------------------------------------------
-    // 【ワンショット風の自前処理】
-    // レイヤー3にいる状態で、何らかのキーが「押された」瞬間、処理が終わったらレイヤーを戻す
+    // 【ワンショット風の自前処理（修正版）】
+    // レイヤー3にいる状態で、何らかのキーが「押された」瞬間、
+    // ただし、タップダンス（TAP_2 = TD(1)）自身のイベントは無視する！
     // -----------------------------------------------------------------
     bool should_clear_layer3 = false;
     if (record->event.pressed && get_highest_layer(layer_state) == 3) {
-        // 通常のキー入力であれば、この一打の直後にレイヤー3を抜けるフラグを立てる
-        should_clear_layer3 = true;
+        if (keycode != TD(X_TAP_DANCE_2)) { // ← ここでTAP_2の誤検知をブロック
+            should_clear_layer3 = true;
+        }
     }
 
     // 既存のマクロ処理
@@ -189,16 +191,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       
       case TD_ALT_GRV:
         if (record->event.pressed) {
-            // 押された瞬間の時間を記録し、まずは「Ctrl」を押す
             my_tap_timer = timer_read();
             register_code(KC_LCTL);
         } else {
-            // 離された瞬間、まず「Ctrl」を解除する
             unregister_code(KC_LCTL);
-            
-            // TAPPING_TERM（デフォルト200ミリ秒）より早く離されたら「タップ」とみなす
             if (timer_elapsed(my_tap_timer) < TAPPING_TERM) {
-                // Ctrlの入力と被らないよう、一瞬だけクリアしてから Alt + ` を確実に送信
                 clear_mods();
                 register_code16(LALT(KC_GRV));
                 unregister_code16(LALT(KC_GRV));
@@ -241,6 +238,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         if (should_clear_layer3) layer_off(3);
         return false;
+        
       case MC_OBJECT: 
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_S) SS_TAP(X_H));
