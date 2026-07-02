@@ -175,18 +175,18 @@ static uint16_t my_tap_timer = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // -----------------------------------------------------------------
-    // 【ワンショット風の自前処理（修正版）】
-    // レイヤー3にいる状態で、何らかのキーが「押された」瞬間、
-    // ただし、タップダンス（TAP_2 = TD(1)）自身のイベントは無視する！
+    // 【ワンショット風の自前処理（完全版）】
+    // レイヤー3にいる状態で、何らかのキーが「離された（!pressed）」瞬間にレイヤーを戻す！
+    // ただし、タップダンス（TAP_2）自体のイベントは無視する。
     // -----------------------------------------------------------------
     bool should_clear_layer3 = false;
-    if (record->event.pressed && get_highest_layer(layer_state) == 3) {
-        if (keycode != TD(X_TAP_DANCE_2)) { // ← ここでTAP_2の誤検知をブロック
+    if (!record->event.pressed && get_highest_layer(layer_state) == 3) {
+        if (keycode != TD(X_TAP_DANCE_2)) {
             should_clear_layer3 = true;
         }
     }
 
-    // 既存のマクロ処理
+    // マクロ処理
     switch (keycode) {
       
       case TD_ALT_GRV:
@@ -247,7 +247,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
     
-    // マクロ以外の通常キー（文字入力など）が押された場合
+    // 通常のキー（KC_NやLALT(KC_1)など）が「離された」タイミングであれば、レイヤー3をオフにする
     if (should_clear_layer3) {
         layer_off(3);
     }
@@ -350,6 +350,8 @@ const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
 const uint16_t PROGMEM my_yu[] = {KC_Y, KC_U, COMBO_END};
 const uint16_t PROGMEM my_df[] = {KC_D, KC_F, COMBO_END};
 const uint16_t PROGMEM my_fg[] = {KC_F, KC_G, COMBO_END};
+const uint16_t PROGMEM my_cv[] = {KC_C, KC_V, COMBO_END};
+
 
 combo_t key_combos[] = {  
   COMBO(my_jk, KC_BTN1), // 左クリック
@@ -365,7 +367,7 @@ combo_t key_combos[] = {
   COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
   COMBO(my_df, MO(4)), // Win + Space
   COMBO(my_fg, MO(3)), // Win + Space
-
+  COMBO(my_cv, KC_BTN1), // Win + Space
 
 };
 #endif
