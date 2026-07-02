@@ -154,7 +154,35 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 #endif
 
+// ==========================================
+// 2. カスタムキーコードの定義
+// ==========================================
 
+enum custom_keycodes {
+    DYNAMIC_KEYMAP_KEYCODES = QK_KB_0, // VIA対応のための記述
+    
+    // ここにあなたのマクロキーコードを追加します
+    MC_SAIZEN,   //  ppt最末尾に移動
+    MC_SAIKOU,
+};
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        
+      // パターンA：特定の文字列（メールアドレスなど）を一気に入力する
+      case MC_SAIZEN: // ご自身で定義したキーコード名
+        if (record->event.pressed) {
+            // Altを押しながらH、G、Rを順番にタップする
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_G) SS_TAP(X_R));
+        }
+      return false;
+      case MC_SAIKOU: // ご自身で定義したキーコード名
+        if (record->event.pressed) {
+            // Altを押しながらH、G、Rを順番にタップする
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_G) SS_TAP(X_K));
+        }
+      return false;
+    }
+}
 // ==========================================
 // 2. キーマップの配置（TAP_0 の定義より後ろに置く）
 // ==========================================
@@ -170,7 +198,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [1] = LAYOUT_universal(
     _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    _______  ,  _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),                                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_BTN3  , KC_F12   ,
+    _______  ,  _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),                                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
     _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_BTN2  , KC_BSPC  ,                                         KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
