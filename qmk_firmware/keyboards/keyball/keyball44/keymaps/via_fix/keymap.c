@@ -348,6 +348,8 @@ const uint16_t PROGMEM my_qw[] = {KC_Q, KC_W, COMBO_END};
 const uint16_t PROGMEM my_sd[] = {KC_S, KC_E, COMBO_END};
 const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
 const uint16_t PROGMEM my_yu[] = {KC_Y, KC_U, COMBO_END};
+const uint16_t PROGMEM my_df[] = {KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM my_fg[] = {KC_F, KC_G, COMBO_END};
 
 combo_t key_combos[] = {  
   COMBO(my_jk, KC_BTN1), // 左クリック
@@ -361,6 +363,10 @@ combo_t key_combos[] = {
   COMBO(my_sd, KC_ENT), // エンター
   COMBO(my_we, KC_DEL), // デリート
   COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
+  COMBO(my_df, MO(3)), // Win + Space
+  COMBO(my_fg, MO(4)), // Win + Space
+
+
 };
 #endif
 
