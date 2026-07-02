@@ -183,11 +183,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // 既存のマクロ処理
     switch (keycode) {
       
-      case TD_ALT_GRV:
+case TD_ALT_GRV:
         if (record->event.pressed) {
-            // キーが押された瞬間だけ Alt + ` を送信
-            SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_GRV) SS_UP(X_LALT));
+            // 他のマクロと同じく、押された瞬間（pressed）にだけ実行
+            // register_code16 を使って Alt + ` を確実に送信
+            register_code16(LALT(KC_GRV));
+        } else {
+            // 【重要】キーが離された（released）ときに、忘れずにキーを解放する
+            unregister_code16(LALT(KC_GRV));
         }
+        // もしレイヤー3の自動引き戻し（should_clear_layer3）をここでも効かせたい場合は追加
+        if (should_clear_layer3) layer_off(3); 
         return false;
       case MC_SAIZEN: 
         if (record->event.pressed) {
@@ -265,10 +271,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),  
 
   [3] = LAYOUT_universal(
-    _______  , MC_OBJECT  , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
-    _______  , _______  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        RGB_M_X  , MC_03  , MC_04  , RGB_M_TW , _______  , _______  ,
-    _______  , _______  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
-                  QK_BOOT  , KBC_RST  , MC_05  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIZEN  , _______       , KBC_RST  , QK_BOOT
+    _______  , MC_OBJECT  , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        _______  , _______  , _______  , _______ , _______ , _______  ,
+    _______  , _______  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        _______  , MC_03  , MC_04  , _______ , _______  , _______  ,
+    _______  , _______  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
+                  QK_BOOT  , KBC_RST  , MC_05  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIZEN  , _______       , _______  , _______
   ),
 
   [4] = LAYOUT_universal(
