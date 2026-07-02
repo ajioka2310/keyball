@@ -121,8 +121,8 @@ void x_finished_2 (tap_dance_state_t *state, void *user_data) {
         register_code(KC_LALT);
         break;
     case DOUBLE_TAP:
-        // ダブルタップでレイヤー3をONにする（またはトグル）
-        set_oneshot_layer(3, ONESHOT_START);
+        // ダブルタップした瞬間、まずレイヤー3をONにする
+        layer_on(3);
         break;
     case SINGLE_TAP_HOLD:
         register_code(KC_LALT);
@@ -139,6 +139,8 @@ void x_reset_2 (tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_LALT);
         break;
     case DOUBLE_TAP:
+        // キーが離された瞬間に「ここから1打打つまでレイヤー3を維持する」とQMKに登録する
+        set_oneshot_layer(3, ONESHOT_START);
         break;
     case SINGLE_TAP_HOLD:
         unregister_code(KC_LALT);
