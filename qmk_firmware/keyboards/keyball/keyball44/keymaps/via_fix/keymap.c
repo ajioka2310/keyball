@@ -76,17 +76,17 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
   xtap_state.state = cur_dance(state);
   switch (xtap_state.state) {
     case SINGLE_TAP:
-        register_code(KC_J);
+        register_code(KC_LCTL);
         break;
     case SINGLE_HOLD:
-        register_code(KC_J);
+        register_code(KC_LCTL);
         break;
     case DOUBLE_TAP:
         register_code(KC_LALT); // まず左Altを押しっぱなしにする
         register_code(KC_GRV);  // その状態でKC_GRV（バッククォート/半角全角）を押す
     break;
     case SINGLE_TAP_HOLD:
-        register_code(KC_J);
+        register_code(KC_LCTL);
         break;
   }
 }
@@ -94,17 +94,17 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
 void x_reset_1 (tap_dance_state_t *state, void *user_data) {
   switch (xtap_state.state) {
     case SINGLE_TAP: 
-        unregister_code(KC_J);
+        unregister_code(KC_LCTL);
         break;
     case SINGLE_HOLD:
-        unregister_code(KC_J);
+        unregister_code(KC_LCTL);
         break;
     case DOUBLE_TAP:
         unregister_code(KC_GRV);  // 先にKC_GRVを離す
         unregister_code(KC_LALT); // 最後に左Altを離す
         break;
     case SINGLE_TAP_HOLD:
-        unregister_code(KC_J);
+        unregister_code(KC_LCTL);
         break;
   }
   xtap_state.state = 0;
@@ -166,7 +166,7 @@ enum custom_keycodes {
     MC_05,   //   ppt
     MC_04,   //  縦幅
     MC_03,   //  横幅
-
+    TD_ALT_GRV, // かな変換
 };
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // -----------------------------------------------------------------
@@ -181,6 +181,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // 既存のマクロ処理
     switch (keycode) {
+      
+      case TD_ALT_GRV:
+        if (record->event.pressed) {
+            // キーが押された瞬間だけ Alt + ` を送信
+            SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_GRV) SS_UP(X_LALT));
+        }
+        return false;
       case MC_SAIZEN: 
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_G) SS_TAP(X_R));
@@ -231,7 +238,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
     KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
-    KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , TAP_1     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
+    MT(MOD_LCTL, TD_ALT_GRV)  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                       KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
                KC_LGUI  , MO(4)    , TAP_2  , KC_SPC   ,  KC_BTN1  ,                                        MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
   ),
@@ -307,7 +314,7 @@ void oledkit_render_info_user(void) {
 #endif
 
 #ifdef COMBO_ENABLE
-const uint16_t PROGMEM my_jk[] = {TAP_1, KC_K, COMBO_END};
+const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM my_kl[] = {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
