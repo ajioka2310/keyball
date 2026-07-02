@@ -191,7 +191,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [4] = LAYOUT_universal(
     RGB_TOG  , AML_TO   , AML_I50  , AML_D50  , _______  , _______  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
-    RGB_MOD  , _______ , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
+    RGB_MOD  , _______ , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                                        KC_MS_WH_LEFT  , KC_MS_WH_DOWN  , KC_MS_WH_UP  , KC_MS_WH_RIGHT , _______  , _______  ,
     RGB_RMOD , RGB_HUD  , RGB_SAD  , RGB_VAD  , _______  , SCRL_DVD ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
@@ -240,8 +240,8 @@ void oledkit_render_info_user(void) {
 
 #ifdef COMBO_ENABLE
 const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
-const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_kl[] = {KC_K, KC_L, COMBO_END};
+const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
 const uint16_t PROGMEM my_tabq[] = {KC_TAB, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_bacp[] = {KC_BSPC, KC_P, COMBO_END};
@@ -249,13 +249,14 @@ const uint16_t PROGMEM my_spcmo1[] = {KC_SPC, MO(1), COMBO_END};
 const uint16_t PROGMEM my_qw[] = {KC_Q, KC_W, COMBO_END};
 const uint16_t PROGMEM my_sd[] = {KC_S, KC_E, COMBO_END};
 const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
+const uint16_t PROGMEM my_yu[] = {KC_Y, KC_U, COMBO_END};
 
 
 
 
 combo_t key_combos[] = {  
 COMBO(my_jk, KC_BTN1), // 左クリック
-COMBO(my_jk, KC_BTN2), // 右クリック
+COMBO(my_kl, KC_BTN2), // 右クリック
 COMBO(my_gh, KC_EQL), // = +
 COMBO(my_bn, KC_MINS), // - _
 COMBO(my_tabq, KC_ESC), // エスケープ
@@ -264,6 +265,7 @@ COMBO(my_spcmo1, KC_QUOT), // '  "
 COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
 COMBO(my_sd, KC_ENT), // エンター
 COMBO(my_we, KC_DEL), // デリート
+COMBO(my_yu, LCA(KC_SPC)), // Ctrl + Alt + Pause/Break
 
 
 };
