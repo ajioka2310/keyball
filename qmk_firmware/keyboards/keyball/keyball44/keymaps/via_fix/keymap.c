@@ -115,16 +115,17 @@ void x_finished_2 (tap_dance_state_t *state, void *user_data) {
   xtap_state.state = cur_dance(state);
   switch (xtap_state.state) {
     case SINGLE_TAP:
-        register_code(KC_MUTE);
+        register_code(KC_LALT);
         break;
     case SINGLE_HOLD:
-        layer_on(0);
+        register_code(KC_LALT);
         break;
     case DOUBLE_TAP:
-        layer_invert(0);
+        // ダブルタップでレイヤー3をONにする（またはトグル）
+        set_oneshot_layer(3, ONESHOT_START);
         break;
     case SINGLE_TAP_HOLD:
-        layer_on(0);
+        register_code(KC_LALT);
         break;
   }
 }
@@ -132,15 +133,15 @@ void x_finished_2 (tap_dance_state_t *state, void *user_data) {
 void x_reset_2 (tap_dance_state_t *state, void *user_data) {
   switch (xtap_state.state) {
     case SINGLE_TAP: 
-        unregister_code(KC_MUTE);
+        unregister_code(KC_LALT);
         break;
     case SINGLE_HOLD:
-        layer_off(0);
+        unregister_code(KC_LALT);
         break;
     case DOUBLE_TAP:
         break;
     case SINGLE_TAP_HOLD:
-        layer_off(0);
+        unregister_code(KC_LALT);
         break;
   }
   xtap_state.state = 0;
@@ -162,9 +163,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
     KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        TAP_1     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
-    KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_EQL  , KC_ENT  ,
-    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_MINS  , MO(4)  ,
-               KC_LALT,   KC_LGUI  , KC_BTN1  , KC_SPC,  MO(4),               MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
+    KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
+    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
+               KC_LGUI  , MO(4)    , TAP_2  , KC_SPC   ,  KC_BTN1  ,                                        MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
   ),
 
   [1] = LAYOUT_universal(
@@ -179,18 +180,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______  , S(KC_1)   , S(KC_2)  , S(KC_3) , S(KC_4)  , S(KC_5) ,                                         S(KC_6)  , S(KC_7)   , S(KC_8)  , S(KC_9)  , S(KC_0)  , _______ ,
     _______  , S(KC_MINS), KC_1     , KC_2    , KC_3     ,S(KC_RBRC),                                        KC_LBRC  , KC_RBRC   , KC_EQL   , KC_COMM  , KC_GRV   , KC_BSLS ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
-  ),
+  ),  
 
   [3] = LAYOUT_universal(
-    RGB_TOG  , AML_TO   , AML_I50  , AML_D50  , _______  , _______  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
-    RGB_MOD  , RGB_HUI  , RGB_SAI  , RGB_VAI  , _______  , SCRL_DVI ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
-    RGB_RMOD , RGB_HUD  , RGB_SAD  , RGB_VAD  , _______  , SCRL_DVD ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
-                  QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
+    RGB_TOG  , AML_TO   , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
+    RGB_MOD  , RGB_HUI  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
+    RGB_RMOD , RGB_HUD  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
+                  QK_BOOT  , KBC_RST  , _______  ,        KC_N  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
 
   [4] = LAYOUT_universal(
     RGB_TOG  , AML_TO   , AML_I50  , AML_D50  , _______  , _______  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
-    RGB_MOD  , _______ , KC_MS_L  , KC_MS_D , KC_MS_U   , KC_MS_R   ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
+    RGB_MOD  , _______ , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
     RGB_RMOD , RGB_HUD  , RGB_SAD  , RGB_VAD  , _______  , SCRL_DVD ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
@@ -202,7 +203,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t highest_layer = get_highest_layer(state);
     
-    // レイヤー4（横スクロール用）または レイヤー3（縦スクロール用）のときにスクロールを有効化
+    // レイヤー3（横スクロール用）または レイヤー4（縦スクロール用）のときにスクロールを有効化
     if (highest_layer == 4 || highest_layer == 3) {
         keyball_set_scroll_mode(true);
     } else {
@@ -212,11 +213,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 // ==========================================
-// 4. トラックボールの挙動カスタム（レイヤー2を横スクロール化）
+// 4. トラックボールの挙動カスタム（レイヤー3を横スクロール化）
 // ==========================================
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     // 現在のレイヤーが 4 のときだけ処理
-    if (get_highest_layer(layer_state) == 4) {
+    if (get_highest_layer(layer_state) == 3) {
         // トラックボールの縦スクロールの動きを、横スクロールにコンバートする
         if (mouse_report.v != 0) {
             mouse_report.h = mouse_report.v; // 縦の移動量を横に移植
@@ -240,6 +241,7 @@ void oledkit_render_info_user(void) {
 #ifdef COMBO_ENABLE
 const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
+const uint16_t PROGMEM my_kl[] = {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
 const uint16_t PROGMEM my_tabq[] = {KC_TAB, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_bacp[] = {KC_BSPC, KC_P, COMBO_END};
@@ -252,9 +254,10 @@ const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
 
 
 combo_t key_combos[] = {  
-COMBO(my_jk, KC_BTN1), // クリック
-COMBO(my_gh, KC_SCLN), // ; :
-COMBO(my_bn, KC_SLSH), // / ?
+COMBO(my_jk, KC_BTN1), // 左クリック
+COMBO(my_jk, KC_BTN2), // 右クリック
+COMBO(my_gh, KC_EQL), // = +
+COMBO(my_bn, KC_MINS), // - _
 COMBO(my_tabq, KC_ESC), // エスケープ
 COMBO(my_bacp, KC_DEL), // デリート
 COMBO(my_spcmo1, KC_QUOT), // '  "
