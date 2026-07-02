@@ -121,8 +121,7 @@ void x_finished_2 (tap_dance_state_t *state, void *user_data) {
         register_code(KC_LALT);
         break;
     case DOUBLE_TAP:
-        // ダブルタップした瞬間、まずレイヤー3をONにする
-        layer_on(3);
+        layer_on(3); // シンプルにレイヤー3に固定する
         break;
     case SINGLE_TAP_HOLD:
         register_code(KC_LALT);
@@ -139,8 +138,7 @@ void x_reset_2 (tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_LALT);
         break;
     case DOUBLE_TAP:
-        // キーが離された瞬間に「ここから1打打つまでレイヤー3を維持する」とQMKに登録する
-        set_oneshot_layer(3, ONESHOT_START);
+        // 何もしない（process_record_user側で引き戻すため）
         break;
     case SINGLE_TAP_HOLD:
         unregister_code(KC_LALT);
@@ -168,23 +166,38 @@ enum custom_keycodes {
     MC_SAIKOU,
 };
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // -----------------------------------------------------------------
+    // 【ワンショット風の自前処理】
+    // レイヤー3にいる状態で、何らかのキーが「押された」瞬間、処理が終わったらレイヤーを戻す
+    // -----------------------------------------------------------------
+    bool should_clear_layer3 = false;
+    if (record->event.pressed && get_highest_layer(layer_state) == 3) {
+        // 通常のキー入力であれば、この一打の直後にレイヤー3を抜けるフラグを立てる
+        should_clear_layer3 = true;
+    }
+
+    // 既存のマクロ処理
     switch (keycode) {
-        
-      // パターンA：特定の文字列（メールアドレスなど）を一気に入力する
-      case MC_SAIZEN: // ご自身で定義したキーコード名
+      case MC_SAIZEN: 
         if (record->event.pressed) {
-            // Altを押しながらH、G、Rを順番にタップする
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_G) SS_TAP(X_R));
         }
-      return false;
-      case MC_SAIKOU: // ご自身で定義したキーコード名
+        if (should_clear_layer3) layer_off(3);
+        return false;
+
+      case MC_SAIKOU: 
         if (record->event.pressed) {
-            // Altを押しながらH、G、Rを順番にタップする
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_G) SS_TAP(X_K));
         }
-      return false;
+        if (should_clear_layer3) layer_off(3);
+        return false;
     }
-    return true;
+    
+    // マクロ以外の通常キー（文字入力など）が押された場合
+    if (should_clear_layer3) {
+        layer_off(3);
+    }
+    return true; 
 }
 // ==========================================
 // 2. キーマップの配置（TAP_0 の定義より後ろに置く）
