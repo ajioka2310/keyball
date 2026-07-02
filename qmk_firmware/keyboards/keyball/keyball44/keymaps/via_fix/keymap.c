@@ -167,6 +167,7 @@ enum custom_keycodes {
     MC_04,   //  縦幅
     MC_03,   //  横幅
     TD_ALT_GRV, // かな変換
+    MC_OBJECT, // オブジェクト作成
 };
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // -----------------------------------------------------------------
@@ -222,6 +223,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         if (should_clear_layer3) layer_off(3);
         return false;
+      case MC_OBJECT: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_S) SS_TAP(X_H));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
     }
     
     // マクロ以外の通常キー（文字入力など）が押された場合
@@ -245,28 +252,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [1] = LAYOUT_universal(
     _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    _______  ,  _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),                                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
-    _______  ,  _______ , KC_LEFT  , KC_DOWN , KC_BTN2  , KC_BSPC  ,                                         KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
+    _______  ,  _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
+    _______  ,  _______ , _______  , _______ , _______  , _______  ,                                         KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
 
   [2] = LAYOUT_universal(
     _______  , KC_1      , KC_2     , KC_3    , KC_4     , KC_5    ,                                           KC_6     , KC_7    , KC_8     , KC_9     , KC_0     , _______ ,
     _______  , S(KC_1)   , S(KC_2)  , S(KC_3) , S(KC_4)  , S(KC_5) ,                                         S(KC_6)  , S(KC_7)   , S(KC_8)  , S(KC_9)  , S(KC_0)  , _______ ,
-    _______  , S(KC_MINS), KC_1     , KC_2    , KC_3     ,S(KC_RBRC),                                        KC_LBRC  , KC_RBRC   , KC_EQL   , KC_COMM  , KC_GRV   , KC_BSLS ,
+    _______  , _______   , _______     , _______    , _______     ,_______,                                        KC_LBRC  , KC_RBRC   , KC_EQL   , KC_COMM  , KC_GRV   , KC_BSLS ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),  
 
   [3] = LAYOUT_universal(
-    RGB_TOG  , AML_TO   , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
-    RGB_MOD  , RGB_HUI  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        RGB_M_X  , MC_03  , MC_04  , RGB_M_TW , _______  , _______  ,
-    RGB_RMOD , RGB_HUD  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
+    _______  , MC_OBJECT  , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
+    _______  , _______  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        RGB_M_X  , MC_03  , MC_04  , RGB_M_TW , _______  , _______  ,
+    _______  , _______  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
                   QK_BOOT  , KBC_RST  , MC_05  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIZEN  , _______       , KBC_RST  , QK_BOOT
   ),
 
   [4] = LAYOUT_universal(
     RGB_TOG  , AML_TO   , AML_I50  , AML_D50  , _______  , _______  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
-    RGB_MOD  , _______ , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                                        KC_MS_WH_LEFT  , KC_MS_WH_DOWN  , KC_MS_WH_UP  , KC_MS_WH_RIGHT , _______  , _______  ,
+    RGB_MOD  , _______  , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                KC_MS_WH_LEFT  , KC_MS_WH_DOWN  , KC_MS_WH_UP  , KC_MS_WH_RIGHT , _______  , _______  ,
     RGB_RMOD , RGB_HUD  , RGB_SAD  , RGB_VAD  , _______  , SCRL_DVD ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
