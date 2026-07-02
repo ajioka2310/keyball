@@ -215,7 +215,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     RGB_TOG  , AML_TO   , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
     RGB_MOD  , RGB_HUI  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
     RGB_RMOD , RGB_HUD  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
-                  QK_BOOT  , KBC_RST  , _______  ,        KC_N  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
+                  QK_BOOT  , KBC_RST  , _______  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIZEN  , _______       , KBC_RST  , QK_BOOT
   ),
 
   [4] = LAYOUT_universal(
