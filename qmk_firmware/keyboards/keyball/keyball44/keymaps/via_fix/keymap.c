@@ -169,6 +169,10 @@ enum custom_keycodes {
     TD_ALT_GRV, // かな変換
     MC_OBJECT, // オブジェクト作成
 };
+
+// 長押し判定用のタイマーを記録する変数（ファイルの上のほうか、関数の外に置いてください）
+static uint16_t my_tap_timer = 0;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // -----------------------------------------------------------------
     // 【ワンショット風の自前処理】
@@ -183,18 +187,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // 既存のマクロ処理
     switch (keycode) {
       
-case TD_ALT_GRV:
+      case TD_ALT_GRV:
         if (record->event.pressed) {
-            // 他のマクロと同じく、押された瞬間（pressed）にだけ実行
-            // register_code16 を使って Alt + ` を確実に送信
-            register_code16(LALT(KC_GRV));
+            // 押された瞬間の時間を記録し、まずは「Ctrl」を押す
+            my_tap_timer = timer_read();
+            register_code(KC_LCTL);
         } else {
-            // 【重要】キーが離された（released）ときに、忘れずにキーを解放する
-            unregister_code16(LALT(KC_GRV));
+            // 離された瞬間、まず「Ctrl」を解除する
+            unregister_code(KC_LCTL);
+            
+            // TAPPING_TERM（デフォルト200ミリ秒）より早く離されたら「タップ」とみなす
+            if (timer_elapsed(my_tap_timer) < TAPPING_TERM) {
+                // Ctrlの入力と被らないよう、一瞬だけクリアしてから Alt + ` を確実に送信
+                clear_mods();
+                register_code16(LALT(KC_GRV));
+                unregister_code16(LALT(KC_GRV));
+            }
         }
-        // もしレイヤー3の自動引き戻し（should_clear_layer3）をここでも効かせたい場合は追加
-        if (should_clear_layer3) layer_off(3); 
+        if (should_clear_layer3) layer_off(3);
         return false;
+        
       case MC_SAIZEN: 
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_G) SS_TAP(X_R));
@@ -251,7 +263,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
     KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
-    MT(MOD_LCTL, TD_ALT_GRV)  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                       KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
+    TD_ALT_GRV  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                       KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
                KC_LGUI  , MO(4)    , TAP_2  , KC_SPC   ,  KC_BTN1  ,                                        MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
   ),
