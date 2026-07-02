@@ -76,7 +76,7 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
   xtap_state.state = cur_dance(state);
   switch (xtap_state.state) {
     case SINGLE_TAP:
-        register_code(KC_Y);
+        register_code(KC_J);
         break;
     case SINGLE_HOLD:
         layer_on(0);
@@ -94,7 +94,7 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
 void x_reset_1 (tap_dance_state_t *state, void *user_data) {
   switch (xtap_state.state) {
     case SINGLE_TAP: 
-        unregister_code(KC_Y);
+        unregister_code(KC_J);
         break;
     case SINGLE_HOLD:
         layer_off(0);
@@ -191,8 +191,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // keymap for default (VIA)
   [0] = LAYOUT_universal(
-    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        TAP_1     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
-    KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
+    KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KJ_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
+    KC_LCTL  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                        KC_H     , TAP_1     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
     KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
                KC_LGUI  , MO(4)    , TAP_2  , KC_SPC   ,  KC_BTN1  ,                                        MO(1),MO(2), RCTL_T(KC_LNG2),     KC_RALT  , MO(3)
   ),
@@ -294,7 +294,7 @@ COMBO(my_spcmo1, KC_QUOT), // '  "
 COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
 COMBO(my_sd, KC_ENT), // エンター
 COMBO(my_we, KC_DEL), // デリート
-COMBO(my_yu, LALT(KC_SPC)), // Ctrl + Alt + Pause/Break
+COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
 
 };
 #endif
