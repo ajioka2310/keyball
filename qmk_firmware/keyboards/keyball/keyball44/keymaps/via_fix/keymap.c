@@ -363,8 +363,8 @@ combo_t key_combos[] = {
   COMBO(my_sd, KC_ENT), // エンター
   COMBO(my_we, KC_DEL), // デリート
   COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
-  COMBO(my_df, MO(3)), // Win + Space
-  COMBO(my_fg, MO(4)), // Win + Space
+  COMBO(my_df, MO(4)), // Win + Space
+  COMBO(my_fg, MO(3)), // Win + Space
 
 
 };
