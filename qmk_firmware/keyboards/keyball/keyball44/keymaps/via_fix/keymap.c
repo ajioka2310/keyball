@@ -79,14 +79,14 @@ void x_finished_1 (tap_dance_state_t *state, void *user_data) {
         register_code(KC_J);
         break;
     case SINGLE_HOLD:
-        layer_on(0);
+        register_code(KC_J);
         break;
     case DOUBLE_TAP:
         register_code(KC_LALT); // まず左Altを押しっぱなしにする
         register_code(KC_GRV);  // その状態でKC_GRV（バッククォート/半角全角）を押す
     break;
     case SINGLE_TAP_HOLD:
-        layer_on(0);
+        register_code(KC_J);
         break;
   }
 }
@@ -97,14 +97,14 @@ void x_reset_1 (tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_J);
         break;
     case SINGLE_HOLD:
-        layer_off(0);
+        unregister_code(KC_J);
         break;
     case DOUBLE_TAP:
         unregister_code(KC_GRV);  // 先にKC_GRVを離す
         unregister_code(KC_LALT); // 最後に左Altを離す
         break;
     case SINGLE_TAP_HOLD:
-        layer_off(0);
+        unregister_code(KC_J);
         break;
   }
   xtap_state.state = 0;
@@ -160,10 +160,13 @@ tap_dance_action_t tap_dance_actions[] = {
 
 enum custom_keycodes {
     DYNAMIC_KEYMAP_KEYCODES = QK_KB_0, // VIA対応のための記述
-    
     // ここにあなたのマクロキーコードを追加します
-    MC_SAIZEN,   //  ppt最末尾に移動
-    MC_SAIKOU,
+    MC_SAIZEN,   //  ppt最前に移動
+    MC_SAIKOU,   //  ppt最末尾に移動
+    MC_05,   //   ppt
+    MC_04,   //  縦幅
+    MC_03,   //  横幅
+
 };
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // -----------------------------------------------------------------
@@ -188,6 +191,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       case MC_SAIKOU: 
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_G) SS_TAP(X_K));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+
+      case MC_05: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_0) SS_TAP(X_5));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+
+      case MC_04: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_0) SS_TAP(X_4));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+
+      case MC_03: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_0) SS_TAP(X_3));
         }
         if (should_clear_layer3) layer_off(3);
         return false;
@@ -228,9 +252,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [3] = LAYOUT_universal(
     RGB_TOG  , AML_TO   , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        RGB_M_P  , RGB_M_B  , RGB_M_R  , RGB_M_SW , RGB_M_SN , RGB_M_K  ,
-    RGB_MOD  , RGB_HUI  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        RGB_M_X  , RGB_M_G  , RGB_M_T  , RGB_M_TW , _______  , _______  ,
+    RGB_MOD  , RGB_HUI  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        RGB_M_X  , MC_03  , MC_04  , RGB_M_TW , _______  , _______  ,
     RGB_RMOD , RGB_HUD  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        CPI_D1K  , CPI_D100 , CPI_I100 , CPI_I1K  , _______  , KBC_SAVE ,
-                  QK_BOOT  , KBC_RST  , _______  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIZEN  , _______       , KBC_RST  , QK_BOOT
+                  QK_BOOT  , KBC_RST  , MC_05  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIZEN  , _______       , KBC_RST  , QK_BOOT
   ),
 
   [4] = LAYOUT_universal(
@@ -283,7 +307,7 @@ void oledkit_render_info_user(void) {
 #endif
 
 #ifdef COMBO_ENABLE
-const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM my_jk[] = {TAP_1, KC_K, COMBO_END};
 const uint16_t PROGMEM my_kl[] = {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
@@ -295,22 +319,18 @@ const uint16_t PROGMEM my_sd[] = {KC_S, KC_E, COMBO_END};
 const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
 const uint16_t PROGMEM my_yu[] = {KC_Y, KC_U, COMBO_END};
 
-
-
-
 combo_t key_combos[] = {  
-COMBO(my_jk, KC_BTN1), // 左クリック
-COMBO(my_kl, KC_BTN2), // 右クリック
-COMBO(my_gh, KC_EQL), // = +
-COMBO(my_bn, KC_MINS), // - _
-COMBO(my_tabq, KC_ESC), // エスケープ
-COMBO(my_bacp, KC_DEL), // デリート
-COMBO(my_spcmo1, KC_QUOT), // '  "
-COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
-COMBO(my_sd, KC_ENT), // エンター
-COMBO(my_we, KC_DEL), // デリート
-COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
-
+  COMBO(my_jk, KC_BTN1), // 左クリック
+  COMBO(my_kl, KC_BTN2), // 右クリック
+  COMBO(my_gh, KC_EQL), // = +
+  COMBO(my_bn, KC_MINS), // - _
+  COMBO(my_tabq, KC_ESC), // エスケープ
+  COMBO(my_bacp, KC_DEL), // デリート
+  COMBO(my_spcmo1, KC_QUOT), // '  "
+  COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
+  COMBO(my_sd, KC_ENT), // エンター
+  COMBO(my_we, KC_DEL), // デリート
+  COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
 };
 #endif
 
