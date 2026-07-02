@@ -294,8 +294,7 @@ COMBO(my_spcmo1, KC_QUOT), // '  "
 COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
 COMBO(my_sd, KC_ENT), // エンター
 COMBO(my_we, KC_DEL), // デリート
-COMBO(my_yu, LCA(KC_SPC)), // Ctrl + Alt + Pause/Break
-
+COMBO(my_yu, LALT(KC_SPC)), // Ctrl + Alt + Pause/Break
 
 };
 #endif
