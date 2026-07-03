@@ -53,3 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MOUSEKEY_WHEEL_INTERVAL 80     // スクロール信号を送る間隔（ミリ秒）。数値を小さくすると高速化します（デフォルト: 100前後）
 #define MOUSEKEY_WHEEL_MAX_SPEED 2     // キーを押し続けたときの最大速度。数値を大きくすると1回あたりのスクロール量が増えます
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 20  // 最大速度（MAX_SPEED）に達するまでのキーの連打数（または押し続け時間）
+
+// ==========================================
+// トラックボールによるスクロールの速度調整（減速）
+// ==========================================
+#define KEYBALL_SCROLL_DIVIDER 4
