@@ -302,7 +302,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t highest_layer = get_highest_layer(state);
     
     // レイヤー3（横スクロール用）または レイヤー4（縦スクロール用）のときにスクロールを有効化
-    if (highest_layer == 4 || highest_layer == 3) {
+    if (highest_layer == 4 || highest_layer == 2) {
         keyball_set_scroll_mode(true);
     } else {
         keyball_set_scroll_mode(false);
@@ -315,7 +315,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 // ==========================================
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
     // 現在のレイヤーが 4 のときだけ処理
-    if (get_highest_layer(layer_state) == 3) {
+    if (get_highest_layer(layer_state) == 2) {
         // トラックボールの縦スクロールの動きを、横スクロールにコンバートする
         if (mouse_report.v != 0) {
             mouse_report.h = mouse_report.v; // 縦の移動量を横に移植
@@ -337,6 +337,7 @@ void oledkit_render_info_user(void) {
 #endif
 
 #ifdef COMBO_ENABLE
+const uint16_t PROGMEM my_hj[] = {KC_H, KC_J, COMBO_END};
 const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM my_kl[] = {KC_K, KC_L, COMBO_END};
 const uint16_t PROGMEM my_lscln[] = {KC_L, KC_SCLN, COMBO_END};
@@ -356,6 +357,7 @@ const uint16_t PROGMEM my_vb[] = {KC_V, KC_B, COMBO_END};
 
 
 combo_t key_combos[] = {  
+  COMBO(my_hj, KC_MINS), // - _
   COMBO(my_jk, LALT(KC_GRV)), // 左クリック
   COMBO(my_kl, KC_BTN1), // 右クリック
   COMBO(my_lscln, MO(4)), // 縦スクロール
@@ -370,8 +372,8 @@ combo_t key_combos[] = {
   COMBO(my_we, KC_DEL), // デリート
   COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
   COMBO(my_df, MO(4)), // 右クリック
-  COMBO(my_fg, MO(4)), // 縦スクロール
-  COMBO(my_vb, MO(3)), // 横スクロール
+  COMBO(my_fg, MO(2)), // 縦スクロール
+  // COMBO(my_vb, MO(3)), // 横スクロール
 };
 #endif
 
