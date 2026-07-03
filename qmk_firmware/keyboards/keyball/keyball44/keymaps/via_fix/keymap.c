@@ -350,7 +350,7 @@ const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
 const uint16_t PROGMEM my_yu[] = {KC_Y, KC_U, COMBO_END};
 const uint16_t PROGMEM my_df[] = {KC_D, KC_F, COMBO_END};
 const uint16_t PROGMEM my_fg[] = {KC_F, KC_G, COMBO_END};
-const uint16_t PROGMEM my_cv[] = {KC_C, KC_V, COMBO_END};
+const uint16_t PROGMEM my_vb[] = {KC_V, KC_B, COMBO_END};
 
 
 combo_t key_combos[] = {  
@@ -365,10 +365,9 @@ combo_t key_combos[] = {
   COMBO(my_sd, KC_ENT), // エンター
   COMBO(my_we, KC_DEL), // デリート
   COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
-  COMBO(my_df, MO(4)), // Win + Space
-  COMBO(my_fg, MO(3)), // Win + Space
-  COMBO(my_cv, KC_BTN1), // Win + Space
-
+  COMBO(my_df, KC_BTN1), // 右クリック
+  COMBO(my_fg, MO(4)), // 縦スクロール
+  COMBO(my_vb, MO(3)), // 横スクロール
 };
 #endif
 
