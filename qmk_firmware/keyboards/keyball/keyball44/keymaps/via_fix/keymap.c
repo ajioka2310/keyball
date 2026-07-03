@@ -168,6 +168,9 @@ enum custom_keycodes {
     MC_03,   //  横幅
     TD_ALT_GRV, // かな変換
     MC_OBJECT, // オブジェクト作成
+    MC_Z100, // zoom 100%
+    MC_Z200, // zoom 200%
+    MC_Z400, // zoom 400%
 };
 
 // 長押し判定用のタイマーを記録する変数（ファイルの上のほうか、関数の外に置いてください）
@@ -245,6 +248,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         if (should_clear_layer3) layer_off(3);
         return false;
+      case MC_Z100: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_W) SS_TAP(X_Q) SS_TAP(X_1) SS_TAP(X_ENT));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+      case MC_Z200: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_W) SS_TAP(X_Q) SS_TAP(X_2) SS_TAP(X_ENT));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+      case MC_Z400: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_W) SS_TAP(X_Q) SS_TAP(X_4) SS_TAP(X_ENT));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
     }
     
     // 通常のキー（KC_NやLALT(KC_1)など）が「離された」タイミングであれば、レイヤー3をオフにする
@@ -288,9 +309,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [4] = LAYOUT_universal(
-    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        _______  , _______  , _______  , _______ , _______ , _______  ,
+    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        MC_Z100  , MC_Z200  , MC_Z400  , _______ , _______ , _______  ,
     _______  , _______  , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                KC_MS_WH_LEFT  , KC_MS_WH_DOWN  , KC_MS_WH_UP  , KC_MS_WH_RIGHT , _______  , _______  ,
-    _______ , _______  , _______  , _______  , _______  , _______ ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
+    _______ , _______  , _______  , _______  , _______  , _______ ,                                        MC_Z100  , MC_Z200 , MC_Z400 , _______  , _______  , _______ ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
   ),
 };
