@@ -369,7 +369,7 @@ combo_t key_combos[] = {
   COMBO(my_sd, KC_ENT), // エンター
   COMBO(my_we, KC_DEL), // デリート
   COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
-  COMBO(my_df, KC_BTN1), // 右クリック
+  COMBO(my_df, MO(4)), // 右クリック
   COMBO(my_fg, MO(4)), // 縦スクロール
   COMBO(my_vb, MO(3)), // 横スクロール
 };
