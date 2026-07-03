@@ -339,6 +339,8 @@ void oledkit_render_info_user(void) {
 #ifdef COMBO_ENABLE
 const uint16_t PROGMEM my_jk[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM my_kl[] = {KC_K, KC_L, COMBO_END};
+const uint16_t PROGMEM my_lscln[] = {KC_L, KC_SCLN, COMBO_END};
+const uint16_t PROGMEM my_kscln[] = {KC_K, KC_SCLN, COMBO_END};
 const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
 const uint16_t PROGMEM my_tabq[] = {KC_TAB, KC_Q, COMBO_END};
@@ -354,8 +356,10 @@ const uint16_t PROGMEM my_vb[] = {KC_V, KC_B, COMBO_END};
 
 
 combo_t key_combos[] = {  
-  COMBO(my_jk, KC_BTN1), // 左クリック
-  COMBO(my_kl, KC_BTN2), // 右クリック
+  COMBO(my_jk, LALT(KC_GRV)), // 左クリック
+  COMBO(my_kl, KC_BTN1), // 右クリック
+  COMBO(my_lscln, MO(4)), // 縦スクロール
+  COMBO(my_kscln, KC_BTN2), // 縦スクロール
   COMBO(my_gh, KC_EQL), // = +
   COMBO(my_bn, KC_MINS), // - _
   COMBO(my_tabq, KC_ESC), // エスケープ
