@@ -57,4 +57,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ==========================================
 // トラックボールによるスクロールの速度調整（減速）
 // ==========================================
-#define KEYBALL_SCROLL_DIVIDER 4
+#define KEYBALL_SCROLL_DIVIDER 8
