@@ -309,7 +309,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [4] = LAYOUT_universal(
-    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        LALT(KC_MS_WH_LEFT)  , LALT(KC_MS_WH_DOWN)  , LALT(KC_MS_WH_UP)  , LALT(KC_MS_WH_RIGHT) , _______ , _______  ,
+    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        LCTL(KC_MS_WH_LEFT)  , LCTL(KC_MS_WH_DOWN)  , LCTL(KC_MS_WH_UP)  , LCTL(KC_MS_WH_RIGHT) , _______ , _______  ,
     _______  , _______  , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                KC_MS_WH_LEFT  , KC_MS_WH_DOWN  , KC_MS_WH_UP  , KC_MS_WH_RIGHT , _______  , _______  ,
     _______ , _______  , _______  , _______  , _______  , _______ ,                                        MC_Z100  , MC_Z200 , MC_Z400 , _______  , _______  , _______ ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
