@@ -305,11 +305,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______  , MC_OBJECT  , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        _______  , _______  , _______  , _______ , _______ , _______  ,
     _______  , _______  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        _______  , MC_03  , MC_04  , _______ , _______  , _______  ,
     LSG(KC_S)  , _______  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
-                  QK_BOOT  , KBC_RST  , MC_05  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIKOU  , _______       , _______  , _______
+                  QK_BOOT  , MC_05  , _______  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIKOU  , _______       , _______  , _______
   ),
 
   [4] = LAYOUT_universal(
-    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        MC_Z100  , MC_Z200  , MC_Z400  , _______ , _______ , _______  ,
+    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        LALT(KC_MS_WH_LEFT)  , LALT(KC_MS_WH_DOWN)  , LALT(KC_MS_WH_UP)  , LALT(KC_MS_WH_RIGHT) , _______ , _______  ,
     _______  , _______  , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                KC_MS_WH_LEFT  , KC_MS_WH_DOWN  , KC_MS_WH_UP  , KC_MS_WH_RIGHT , _______  , _______  ,
     _______ , _______  , _______  , _______  , _______  , _______ ,                                        MC_Z100  , MC_Z200 , MC_Z400 , _______  , _______  , _______ ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
