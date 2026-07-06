@@ -248,6 +248,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         if (should_clear_layer3) layer_off(3);
         return false;
+      case MC_Z050: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_W) SS_TAP(X_Q) SS_TAP(X_5) SS_TAP(X_ENT));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+      case MC_Z060: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_W) SS_TAP(X_Q) SS_TAP(X_6) SS_TAP(X_ENT));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
       case MC_Z100: 
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_W) SS_TAP(X_Q) SS_TAP(X_1) SS_TAP(X_ENT));
@@ -309,10 +321,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [4] = LAYOUT_universal(
-    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        LCTL(KC_MS_WH_LEFT)  , LCTL(KC_MS_WH_DOWN)  , LCTL(KC_MS_WH_UP)  , LCTL(KC_MS_WH_RIGHT) , _______ , _______  ,
+    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400  , _______ , _______  ,
     _______  , _______  , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                KC_MS_WH_LEFT  , KC_MS_WH_DOWN  , KC_MS_WH_UP  , KC_MS_WH_RIGHT , _______  , _______  ,
-    _______ , _______  , _______  , _______  , _______  , _______ ,                                        MC_Z100  , MC_Z200 , MC_Z400 , _______  , _______  , _______ ,
-                  QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   _______  , _______  , _______       , KBC_RST  , QK_BOOT
+    _______ , _______  , _______  , _______  , _______  , _______ ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400  , _______ ,
+                  QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   LSG(KC_LEFT)  , LSG(KC_RIGHT)  , _______       , KBC_RST  , QK_BOOT
   ),
 };
 
@@ -367,10 +379,10 @@ const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
 const uint16_t PROGMEM my_tabq[] = {KC_TAB, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_bacp[] = {KC_BSPC, KC_P, COMBO_END};
-const uint16_t PROGMEM my_spcmo1[] = {KC_SPC, MO(1), COMBO_END};
+const uint16_t PROGMEM my_spcmo1[] = {KC_SPC, LT(1,KC_EQL), COMBO_END};
 const uint16_t PROGMEM my_qw[] = {KC_Q, KC_W, COMBO_END};
-const uint16_t PROGMEM my_sd[] = {KC_S, KC_E, COMBO_END};
-const uint16_t PROGMEM my_we[] = {KC_S, KC_D, COMBO_END};
+const uint16_t PROGMEM my_sd[] = {KC_S, KC_D, COMBO_END};
+const uint16_t PROGMEM my_we[] = {KC_W, KC_E, COMBO_END};
 const uint16_t PROGMEM my_yu[] = {KC_Y, KC_U, COMBO_END};
 const uint16_t PROGMEM my_df[] = {KC_D, KC_F, COMBO_END};
 const uint16_t PROGMEM my_fg[] = {KC_F, KC_G, COMBO_END};
@@ -379,21 +391,21 @@ const uint16_t PROGMEM my_vb[] = {KC_V, KC_B, COMBO_END};
 
 combo_t key_combos[] = {  
   COMBO(my_hj, KC_MINS), // - _
-  COMBO(my_jk, LALT(KC_GRV)), // 左クリック
+  COMBO(my_jk, LALT(KC_GRV)), // 入力切替
   COMBO(my_kl, KC_BTN1), // 右クリック
   COMBO(my_lscln, MO(4)), // 縦スクロール
-  COMBO(my_kscln, KC_BTN2), // 縦スクロール
+  COMBO(my_kscln, KC_BTN2), // 左クリック
   COMBO(my_gh, KC_EQL), // = +
   COMBO(my_bn, KC_MINS), // - _
   COMBO(my_tabq, KC_ESC), // エスケープ
   COMBO(my_bacp, KC_DEL), // デリート
   COMBO(my_spcmo1, KC_QUOT), // '  "
   COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
-  COMBO(my_sd, KC_ENT), // エンター
-  COMBO(my_we, KC_DEL), // デリート
-  COMBO(my_yu, LGUI(KC_SPC)), // Win + Space
-  COMBO(my_df, MO(4)), // 右クリック
-  COMBO(my_fg, MO(2)), // 縦スクロール
+  COMBO(my_sd, LALT(KC_GRV)), // 入力切替
+  // COMBO(my_we, KC_DEL), // デリート
+  COMBO(my_yu, LGUI(KC_SPC)), // 入力切替(MAC)
+  COMBO(my_df, MO(4)), // 縦スクロール
+  COMBO(my_fg, MO(2)), // 横スクロール
   // COMBO(my_vb, MO(3)), // 横スクロール
 };
 #endif
