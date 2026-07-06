@@ -168,6 +168,8 @@ enum custom_keycodes {
     MC_03,   //  横幅
     TD_ALT_GRV, // かな変換
     MC_OBJECT, // オブジェクト作成
+    MC_Z050, // zoom 050%
+    MC_Z060, // zoom 066%
     MC_Z100, // zoom 100%
     MC_Z200, // zoom 200%
     MC_Z400, // zoom 400%
@@ -321,7 +323,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [4] = LAYOUT_universal(
-    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400  , _______ , _______  ,
+    _______  , _______   , LALT(KC_F4)  , _______  , _______  , _______  ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400  , _______ , 
     _______  , _______  , KC_MS_WH_LEFT  , KC_MS_WH_DOWN , KC_MS_WH_UP   , KC_MS_WH_RIGHT   ,                KC_MS_WH_LEFT  , KC_MS_WH_DOWN  , KC_MS_WH_UP  , KC_MS_WH_RIGHT , _______  , _______  ,
     _______ , _______  , _______  , _______  , _______  , _______ ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400  , _______ ,
                   QK_BOOT  , KBC_RST  , _______  ,        _______  , _______  ,                   LSG(KC_LEFT)  , LSG(KC_RIGHT)  , _______       , KBC_RST  , QK_BOOT
