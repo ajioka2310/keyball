@@ -163,14 +163,13 @@ enum custom_keycodes {
     // ここにあなたのマクロキーコードを追加します
     MC_SAIZEN,   //  ppt最前に移動
     MC_SAIKOU,   //  ppt最末尾に移動
-    MC_05,   //   ppt
-    MC_04,   //  縦幅
     MC_03,   //  横幅
-    MC_09,   //   ppt
-    MC_08,   //  縦幅
-    MC_07,   //  横幅
+    MC_04,   //  縦幅
+    MC_05,   //   ppt
     MC_06,   //  縦幅
-    MC_05,   //  横幅
+    MC_07,   //  横幅
+    MC_08,   //  縦幅
+    MC_09,   //   ppt
     TD_ALT_GRV, // かな変換
     MC_OBJECT, // オブジェクト作成
     MC_Z050, // zoom 050%n
@@ -263,6 +262,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       case MC_07: 
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_0) SS_TAP(X_7));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+      case MC_06: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_0) SS_TAP(X_6));
         }
         if (should_clear_layer3) layer_off(3);
         return false;
