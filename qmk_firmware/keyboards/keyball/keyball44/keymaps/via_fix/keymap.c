@@ -346,7 +346,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______  , _______  , _______ , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        _______  , _______  , _______  , _______ , _______ , _______  ,
     _______  , MC_06  , MC_05  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        _______  , _______  , _______  , _______ , _______  , _______  ,
     LSG(KC_S)  , MC_SAIZEN  , MC_SAIKOU  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
-                  _______  , _______  , MC_09  ,   MC_08  , MC_07  ,                   _______  , _______  , _______       , _______  , QK_BOOT
+                  _______  , MC_OBJECT  , MC_09  ,   MC_08  , MC_07  ,                   _______  , _______  , _______       , _______  , QK_BOOT
   ),
 
   [4] = LAYOUT_universal(
