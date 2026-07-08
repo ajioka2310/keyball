@@ -166,9 +166,14 @@ enum custom_keycodes {
     MC_05,   //   ppt
     MC_04,   //  縦幅
     MC_03,   //  横幅
+    MC_09,   //   ppt
+    MC_08,   //  縦幅
+    MC_07,   //  横幅
+    MC_06,   //  縦幅
+    MC_05,   //  横幅
     TD_ALT_GRV, // かな変換
     MC_OBJECT, // オブジェクト作成
-    MC_Z050, // zoom 050%
+    MC_Z050, // zoom 050%n
     MC_Z060, // zoom 066%
     MC_Z100, // zoom 100%
     MC_Z200, // zoom 200%
@@ -243,7 +248,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         if (should_clear_layer3) layer_off(3);
         return false;
-        
+      case MC_09: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_0) SS_TAP(X_9));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+      case MC_08: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_0) SS_TAP(X_8));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
+      case MC_07: 
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_0) SS_TAP(X_7));
+        }
+        if (should_clear_layer3) layer_off(3);
+        return false;
       case MC_OBJECT: 
         if (record->event.pressed) {
             SEND_STRING(SS_TAP(X_LALT) SS_TAP(X_H) SS_TAP(X_S) SS_TAP(X_H));
@@ -297,29 +319,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_universal(
     KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
     TD_ALT_GRV  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                       KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
-    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4)  ,
-             MO(4), KC_LGUI  , TAP_2, KC_BTN1  , KC_SPC     ,                                        LT(1,KC_EQL),LT(2,KC_MINS), _______, _______  , LT(3,KC_QUOT)
+    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(3),
+             MO(4), KC_LGUI  , KC_LALT, KC_BTN1  , KC_SPC     ,                                        MO(1),MO(2), _______, _______  , KC_QUOT
   ),
 
   [1] = LAYOUT_universal(
     _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                         KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    _______  ,  _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
-    _______  ,  _______ , _______  , _______ , _______  , _______  ,                                         KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
-                  _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
+    _______  ,  MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400,                         KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
+    _______  ,  _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),                   KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
+                  _______  , _______ , LSG(KC_LEFT) , LSG(KC_RIGHT)  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),
 
   [2] = LAYOUT_universal(
     _______  , KC_1      , KC_2     , KC_3    , KC_4     , KC_5    ,                                           KC_6     , KC_7    , KC_8     , KC_9     , KC_0     , _______ ,
-    _______  , S(KC_1)   , S(KC_2)  , S(KC_3) , S(KC_4)  , S(KC_5) ,                                         S(KC_6)  , S(KC_7)   , S(KC_8)  , S(KC_9)  , S(KC_0)  , _______ ,
+    _______  , S(KC_1)   , S(KC_2)  , S(KC_3) , S(KC_4)  , S(KC_5) ,   =                                      S(KC_6)  , S(KC_7)   , S(KC_8)  , S(KC_9)  , S(KC_0)  , _______ ,
     _______  , _______   , _______     , _______    , _______     ,_______,                                        KC_LBRC  , KC_RBRC   , KC_EQL   , KC_COMM  , KC_GRV   , KC_BSLS ,
                   _______  , _______ , _______  ,         _______  , _______  ,                   _______  , _______  , _______       , _______  , _______
   ),  
 
   [3] = LAYOUT_universal(
-    _______  , MC_OBJECT  , KC_L  , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        _______  , _______  , _______  , _______ , _______ , _______  ,
-    _______  , _______  , KC_M  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        _______  , MC_03  , MC_04  , _______ , _______  , _______  ,
-    LSG(KC_S)  , _______  , KC_H  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
-                  QK_BOOT  , MC_05  , _______  ,        KC_N  , _______  ,                   MC_SAIZEN  , MC_SAIKOU  , _______       , _______  , _______
+    _______  , _______  , _______ , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        _______  , _______  , _______  , _______ , _______ , _______  ,
+    _______  , MC_06  , MC_05  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        _______  , MC_03  , MC_04  , _______ , _______  , _______  ,
+    LSG(KC_S)  , _______  , _______  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
+                  QK_BOOT  , MC_OBJECT  , MC_09  ,   MC_08  , MC_07  ,                   MC_SAIZEN  , MC_SAIKOU  , _______       , _______  , _______
   ),
 
   [4] = LAYOUT_universal(
@@ -381,7 +403,7 @@ const uint16_t PROGMEM my_gh[] = {KC_G, KC_H, COMBO_END};
 const uint16_t PROGMEM my_bn[] = {KC_B, KC_N, COMBO_END};
 const uint16_t PROGMEM my_tabq[] = {KC_TAB, KC_Q, COMBO_END};
 const uint16_t PROGMEM my_bacp[] = {KC_BSPC, KC_P, COMBO_END};
-const uint16_t PROGMEM my_spcmo1[] = {KC_SPC, LT(1,KC_EQL), COMBO_END};
+const uint16_t PROGMEM my_spcmo1[] = {KC_SPC, MO(1), COMBO_END};
 const uint16_t PROGMEM my_qw[] = {KC_Q, KC_W, COMBO_END};
 const uint16_t PROGMEM my_sd[] = {KC_S, KC_D, COMBO_END};
 const uint16_t PROGMEM my_we[] = {KC_W, KC_E, COMBO_END};
