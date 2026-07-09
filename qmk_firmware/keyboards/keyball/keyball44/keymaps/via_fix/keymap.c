@@ -330,7 +330,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [1] = LAYOUT_universal(
     _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                   KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    LSG(KC_LEFT) , LSG(KC_RIGHT) , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),          KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
+    _______ , _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),          KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
     _______  ,  MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400,                                     KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
                   _______  , _______ , _______ , _______  , _______  ,                   _______  , _______  , _______  , _______  , _______
   ),
@@ -345,7 +345,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [3] = LAYOUT_universal(
     _______  , _______  , _______ , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        _______  , _______  , _______  , _______ , _______ , _______  ,
     _______  , MC_06  , MC_05  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        _______  , _______  , _______  , _______ , _______  , _______  ,
-    _______  , MC_SAIZEN  , MC_SAIKOU  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
+    LSG(KC_S)  , MC_SAIZEN  , MC_SAIKOU  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
                   _______  , MC_OBJECT  , MC_09  ,   MC_08  , MC_07  ,                   _______  , _______  , _______       , _______  , QK_BOOT
   ),
 
