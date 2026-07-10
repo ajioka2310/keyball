@@ -324,14 +324,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_universal(
     KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                        KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
     TD_ALT_GRV  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                       KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT  ,
-    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(4),
-             MO(3), KC_LGUI  , KC_LALT, KC_BTN1  , KC_SPC     ,                                        MO(1),MO(2), _______, _______  , KC_QUOT
+    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                        KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(3),
+             MO(4), KC_LGUI  , KC_LALT, KC_BTN1  , KC_SPC     ,                                        MO(1),MO(2), _______, _______  , KC_QUOT
   ),
 
   [1] = LAYOUT_universal(
     _______  ,  KC_F1   , KC_F2    , KC_F3   , KC_F4    , KC_F5    ,                                   KC_F6    , KC_F7    , KC_F8    , KC_F9    , KC_F10   , KC_F11   ,
-    _______ , _______ , LGUI(KC_LEFT), LGUI(KC_DOWN), LGUI(KC_UP), LGUI(KC_RIGHT),          KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
-    _______  ,  MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400,                                     KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
+    _______ , _______ , _______  , _______ , _______ , _______  ,                             KC_LEFT  , KC_DOWN  , KC_UP    , KC_RIGHT , KC_END  , KC_F12   ,
+    _______ ,  _______  , _______ , _______ , _______  , _______  ,                                    KC_HOME  , KC_PGUP  , KC_PGDN  , KC_END   , _______  , _______  ,
                   _______  , _______ , _______ , _______  , _______  ,                   _______  , _______  , _______  , _______  , _______
   ),
 
@@ -343,14 +343,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),  
 
   [3] = LAYOUT_universal(
-    _______  , _______  , _______ , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        _______  , _______  , _______  , _______ , _______ , _______  ,
-    _______  , MC_06  , MC_05  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        _______  , _______  , _______  , _______ , _______  , _______  ,
-    LSG(KC_S)  , MC_SAIZEN  , MC_SAIKOU  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        _______  , _______ , _______ , _______  , _______  , _______ ,
+    _______  , _______  , _______ , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400,
+    _______  , MC_06  , MC_05  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        MS_WHLL  , MS_WHLD  , MS_WHLU  , MS_WHLR , _______  , _______  ,
+    LSG(KC_S)  , MC_SAIZEN  , MC_SAIKOU  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400,
                   _______  , MC_OBJECT  , MC_09  ,   MC_08  , MC_07  ,                   _______  , _______  , _______       , _______  , QK_BOOT
   ),
 
   [4] = LAYOUT_universal(
-    LALT(KC_F4)  , LGUI(KC_1), LGUI(KC_2), LGUI(KC_3), LGUI(KC_4), LGUI(KC_5),                  LGUI(KC_6), LGUI(KC_7), LGUI(KC_8), LGUI(KC_9), LGUI(KC_0) , _______ ,
+    LALT(KC_F4)  , LAG(KC_1), LAG(KC_2), LAG(KC_3), LAG(KC_4), LAG(KC_5),                  LAG(KC_6), LAG(KC_7), LAG(KC_8), LAG(KC_9), LAG(KC_0) , _______ ,
     _______  , LCTL(KC_1), LCTL(KC_2), LCTL(KC_3), LCTL(KC_4), LCTL(KC_5),                  LCTL(KC_6), LCTL(KC_7), LCTL(KC_8), LCTL(KC_9), LCTL(KC_0) , _______ ,
     LSG(KC_S) , _______  , _______  , _______  , _______  , _______ ,                                        _______  , _______  , _______  , _______ , _______  , _______  ,
                   QK_BOOT  , KBC_RST  , _______  , _______  , _______  ,                   _______  , _______  , _______       , _______  , QK_BOOT
