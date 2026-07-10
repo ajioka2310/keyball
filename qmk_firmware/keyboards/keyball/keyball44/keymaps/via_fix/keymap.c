@@ -343,9 +343,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),  
 
   [3] = LAYOUT_universal(
-    _______  , _______  , _______ , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400,
+    _______  , _______  , _______ , LALT(KC_7)  , LALT(KC_8)  , LALT(KC_9)  ,                                    MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400, _______  ,
     _______  , MC_06  , MC_05  , LALT(KC_4)  , LALT(KC_5)  , LALT(KC_6) ,                                        MS_WHLL  , MS_WHLD  , MS_WHLU  , MS_WHLR , _______  , _______  ,
-    LSG(KC_S)  , MC_SAIZEN  , MC_SAIKOU  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                                        MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400,
+    LSG(KC_S)  , MC_SAIZEN  , MC_SAIKOU  , LALT(KC_1)  , LALT(KC_2)  , LALT(KC_3) ,                              MC_Z050  , MC_Z060 , MC_Z100 , MC_Z200  , MC_Z400, _______  ,
                   _______  , MC_OBJECT  , MC_09  ,   MC_08  , MC_07  ,                   _______  , _______  , _______       , _______  , QK_BOOT
   ),
 
