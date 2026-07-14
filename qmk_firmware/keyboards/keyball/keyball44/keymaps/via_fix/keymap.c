@@ -333,7 +333,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB    , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,                                         KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_BSPC  ,
     TD_ALT_GRV, KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,                                         KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_ENT   ,
     KC_LSFT   , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,                                         KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , MO(3)    ,
-                MO(4)    , KC_LGUI  , KC_LALT  , KC_BTN1  , KC_SPC   ,                                         MO(1)    , MO(2)    , _______  , _______  , KC_QUOT  
+                MO(4)    , KC_LGUI  , KC_LALT  , KC_BTN1  , KC_SPC   ,                                         MO(1)    , MO(2)    , _______  , _______  , KC_GRV  
   ),
 
   // -----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [2] = LAYOUT_universal(
     _______   , KC_1     , KC_2     , KC_3     , KC_4     , KC_5     ,                                         KC_6     , KC_7     , KC_8     , KC_9     , KC_0     , _______  ,
     _______   , S(KC_1)  , S(KC_2)  , S(KC_3)  , S(KC_4)  , S(KC_5)  ,                                         S(KC_6)  , S(KC_7)  , S(KC_8)  , S(KC_9)  , S(KC_0)  , _______  ,
-    _______   , _______  , _______  , _______  , _______  , _______  ,                                         KC_LBRC  , KC_RBRC  , KC_EQL   , KC_COMM  , KC_GRV   , KC_BSLS  ,
+    _______   , _______  , _______  , _______  , _______  , _______  ,                                         KC_LBRC  , KC_RBRC  , _______  , _______  , _______  , KC_BSLS  ,
                 _______  , _______  , _______  , _______  , _______  ,                                         _______  , _______  , _______  , _______  , _______  
   ),  
 
@@ -362,7 +362,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [3] = LAYOUT_universal(
     _______   , _______  , _______  , LALT(KC_7), LALT(KC_8), LALT(KC_9),                                         MC_Z050  , MC_Z060  , MC_Z100  , MC_Z200  , MC_Z400  , _______  ,
     _______   , MC_06    , MC_05    , LALT(KC_4), LALT(KC_5), LALT(KC_6),                                         KC_MS_WH_LEFT, KC_MS_WH_DOWN, KC_MS_WH_UP, KC_MS_WH_RIGHT, _______, _______,
-    LSG(KC_S) , MC_SAIZEN, MC_SAIKOU, LALT(KC_1), LALT(KC_2), LALT(KC_3),                                         MC_Z050  , MC_Z060  , MC_Z100  , MC_Z200  , MC_Z400  , _______  ,
+    _______   , MC_SAIZEN, MC_SAIKOU, LALT(KC_1), LALT(KC_2), LALT(KC_3),                                         MC_Z050  , MC_Z060  , MC_Z100  , MC_Z200  , MC_Z400  , _______  ,
                 _______  , MC_OBJECT , MC_09    , MC_08    , MC_07    ,                                         _______  , _______  , _______  , _______  , QK_BOOT  
   ),
 
@@ -437,20 +437,22 @@ const uint16_t PROGMEM my_df[] = {KC_D, KC_F, COMBO_END};
 const uint16_t PROGMEM my_fg[] = {KC_F, KC_G, COMBO_END};
 const uint16_t PROGMEM my_vb[] = {KC_V, KC_B, COMBO_END};
 const uint16_t PROGMEM my_m1m2[] = {MO(1), MO(2), COMBO_END};
+const uint16_t PROGMEM my_ty[] = {KC_T, KC_Y, COMBO_END};
+
 
 
 
 combo_t key_combos[] = {  
   COMBO(my_hj, KC_MINS), // - _
-  COMBO(my_jk, LALT(KC_GRV)), // 入力切替
-  COMBO(my_kl, KC_BTN1), // 右クリック
-  COMBO(my_lscln, MO(4)), // 縦スクロール
-  COMBO(my_kscln, KC_BTN2), // 左クリック
+  COMBO(my_jk, KC_BTN1), // 右クリック
+  COMBO(my_kl, MO(4)), // 縦スクロール
+  COMBO(my_lscln, KC_BTN2), // 縦スクロール
   COMBO(my_gh, KC_EQL), // = +
   COMBO(my_bn, KC_MINS), // - _
+  COMBO(my_spcmo1, KC_QUOT), // '  "
+  COMBO(my_ty, KC_BSLS), // '  "
   COMBO(my_tabq, KC_ESC), // エスケープ
   COMBO(my_bacp, KC_DEL), // デリート
-  COMBO(my_spcmo1, KC_QUOT), // '  "
   COMBO(my_qw, LCA(KC_PAUSE)), // Ctrl + Alt + Pause/Break
   COMBO(my_sd, LALT(KC_GRV)), // 入力切替
   // COMBO(my_we, KC_DEL), // デリート
